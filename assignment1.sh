@@ -10,13 +10,13 @@ ramSize=$(free -h | grep -i "mem:" | awk '{print $2}')
 osSource=$(cat /etc/os-release | grep "PRETTY_NAME" | cut -d= -f2)
 disks=$(lsblk -dno model | tr -d '[:space:]' | cut -dS -f2)
 diskSize=$(lsblk -dno size | tail -n 3 | awk '{print $1}')
-vidCardMake=$(lshw -class display | grep 'vendor:' | cut -d':' -f2)
+vidCardMake=$(lshw -class display | grep -i 'vendor:' | cut -d':' -f2)
 vidCard=$(lshw -class display | grep -i 'product:' | cut -d':' -f2)
 ipAddress=$(ip addr show dev ens33 | awk '/inet /{print $2}')
 fqdn=$(hostname -f)
 hostAddress=$(ip a s dev ens33 | awk '/inet /{print $2}' | cut -d'/' -f1)
 gatewayIP=$(ip route | awk '/default /{print $3}')
-
+networkCard=$(lshw -class network | awk '/vendor: /' | cut -d':' -f2)
 
 cat <<EOF
 
@@ -43,7 +43,7 @@ FQDN: $fqdn
 Host Address: $hostAddress
 Gateway IP: $gatewayIP
 DNS Server:
-Interface Name: 
+Interface Name: $networkCard
 IP Address: $ipAddress
 
 System Status
