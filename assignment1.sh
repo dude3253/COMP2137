@@ -15,7 +15,7 @@ diskSize2=$(lsblk -dno size | tail -n 2 | awk '{print $1}'| sed -n '1p')
 vidCardMake=$(lshw -class display | grep -i 'vendor:' | cut -d':' -f2)
 vidCard=$(lshw -class display | grep -i 'product:' | cut -d':' -f2)
 ipAddress=$(ip addr show | awk '/inet /{print $2}' | sed -n '2p')
-fqdn=$(hostname -f)
+fqdn=$(nmcli | awk '/domains: / {print $2}' | sed -n '2p')
 hostAddress=$(ip addr show | awk '/inet /{print $2}' | cut -d'/' -f1 | sed -n '2p')
 gatewayIP=$(ip route | awk '/default /{print $3}')
 networkMake=$(lshw -class network | awk '/vendor: /' | head -n 1 | cut -d':' -f2)
@@ -42,7 +42,7 @@ Videocard: $vidCardMake$vidCard
 
 Network Information
 -------------------
-FQDN: $fqdn
+FQDN: $comp_hostname.$fqdn
 Host Address: $hostAddress
 Gateway IP: $gatewayIP
 DNS Server:
