@@ -20,6 +20,7 @@ hostAddress=$(ip addr show | awk '/inet /{print $2}' | cut -d'/' -f1 | sed -n '2
 gatewayIP=$(ip route | awk '/default /{print $3}')
 networkMake=$(lshw -class network | awk '/vendor: /' | head -n 1 | cut -d':' -f2)
 networkCard=$(lshw -class network | awk '/product: /'| head -n 1 | cut -d':' -f2)
+dnsServer=$(nmcli | awk '/servers: /{print $2}' | sed -n '1p')
 
 cat <<EOF
 
@@ -45,7 +46,7 @@ Network Information
 FQDN: $comp_hostname.$fqdn
 Host Address: $hostAddress
 Gateway IP: $gatewayIP
-DNS Server:
+DNS Server: $dnsServer
 Interface Name: $networkMake$networkCard
 IP Address: $ipAddress
 
