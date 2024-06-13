@@ -8,15 +8,18 @@ cpuInfo=$(lscpu | grep -i 'Model name:' | cut -d':' -f2 | tr -d '[:space:]')
 cpuSpeed=$(cat /proc/cpuinfo | grep -i 'cpu mhz' | head -n 1 | awk '{print $4}')
 ramSize=$(free -h | grep -i "mem:" | awk '{print $2}')
 osSource=$(cat /etc/os-release | grep "PRETTY_NAME" | cut -d= -f2)
-disks=$(lsblk -dno model | tr -d '[:space:]' | cut -dS -f2)
-diskSize=$(lsblk -dno size | tail -n 3 | awk '{print $1}')
+disks1=$(lsblk -dno model | tr -d '[:space:]' | cut -dS -f1)
+diskSize1=$(lsblk -dno size | head -n +24 | awk '{print $1}')
+disks2=$(lsblk -dno model | tr -d '[:space:]' | cut -dS -f2)
+diskSize2=$(lsblk -dno size | tail -n 2 | awk '{print $1}')
 vidCardMake=$(lshw -class display | grep -i 'vendor:' | cut -d':' -f2)
 vidCard=$(lshw -class display | grep -i 'product:' | cut -d':' -f2)
-ipAddress=$(ip addr show dev ens33 | awk '/inet /{print $2}')
+ipAddress=$(ip addr show | awk '/inet /{print $2}' | cut -d'/' -f1 | sed -n '2p')
 fqdn=$(hostname -f)
-hostAddress=$(ip a s dev ens33 | awk '/inet /{print $2}' | cut -d'/' -f1)
+hostAddress=$(ip addr show | awk '/inet /{print $2}' | cut -d'/' -f1 | sed -n '2p')
 gatewayIP=$(ip route | awk '/default /{print $3}')
-networkCard=$(lshw -class network | awk '/vendor: /' | cut -d':' -f2)
+networkMake=$(lshw -class network | awk '/vendor: /' | head -n 1 | cut -d':' -f2)
+networkCard=$(lshw -class network | awk '/product: /'| head -n 1 | cut -d':' -f2)
 
 cat <<EOF
 
@@ -29,12 +32,12 @@ HOSTNAME: $comp_hostname
 OS: $osSource
 Uptime: $userUptime
 
-Hardware Information
+Hardware Information 
 --------------------
 CPU: $cpuInfo
 Speed: $cpuSpeed
 RAM: $ramSize
-Disks: $disks$diskSize
+Disks: $disks1 - $diskSize1, $disks2 - $diskSize2
 Videocard: $vidCardMake$vidCard
 
 Network Information
@@ -43,7 +46,7 @@ FQDN: $fqdn
 Host Address: $hostAddress
 Gateway IP: $gatewayIP
 DNS Server:
-Interface Name: $networkCard
+Interface Name: $networkMake$networkCard
 IP Address: $ipAddress
 
 System Status
