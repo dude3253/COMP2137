@@ -8,7 +8,7 @@ cpuInfo=$(lscpu | grep -i 'Model name:' | cut -d':' -f2 | tr -d '[:space:]')
 cpuSpeed=$(cat /proc/cpuinfo | grep -i 'cpu mhz' | head -n 1 | awk '{print $4}')
 ramSize=$(free -h | grep -i "mem:" | awk '{print $2}')
 osSource=$(cat /etc/os-release | grep "PRETTY_NAME" | cut -d= -f2)
-disks=$(lsblk -dno model | tr -d '[:space:]' | cut -dS -f2); 
+disks=$(lsblk -dno model | tr -d '[:space:]' | cut -dS -f2)
 diskSize=$(lsblk -dno size | tail -n 3 | awk '{print $1}')
 vidCardMake=$(lshw -class display | grep 'vendor:' | cut -d':' -f2)
 vidCard=$(lshw -class display | grep -i 'product:' | cut -d':' -f2)
