@@ -12,8 +12,10 @@ disks=$(lsblk -dno model | tr -d '[:space:]' | cut -dS -f2)
 diskSize=$(lsblk -dno size | tail -n 3 | awk '{print $1}')
 vidCardMake=$(lshw -class display | grep 'vendor:' | cut -d':' -f2)
 vidCard=$(lshw -class display | grep -i 'product:' | cut -d':' -f2)
-ipAddress=$(ip addr show dev ens33)
+ipAddress=$(ip addr show dev ens33 | awk '/inet /{print $2}')
 fqdn=$(hostname -f)
+hostAddress=$(ip a s dev ens33 | awk '/inet /{print $2}' | cut -d'/' -f1)
+gatewayIP=$(ip route | awk '/default /{print $3}')
 
 
 cat <<EOF
@@ -38,8 +40,8 @@ Videocard: $vidCardMake$vidCard
 Network Information
 -------------------
 FQDN: $fqdn
-Host Address: 
-Gateway IP: 
+Host Address: $hostAddress
+Gateway IP: $gatewayIP
 DNS Server:
 Interface Name: 
 IP Address: $ipAddress
