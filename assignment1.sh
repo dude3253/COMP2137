@@ -20,7 +20,8 @@ hostAddress=$(ip addr show | awk '/inet /{print $2}' | cut -d'/' -f1 | sed -n '2
 gatewayIP=$(ip route | awk '/default /{print $3}')
 networkMake=$(lshw -class network | awk '/vendor: /' | head -n 1 | cut -d':' -f2)
 networkCard=$(lshw -class network | awk '/product: /'| head -n 1 | cut -d':' -f2)
-dnsServer=$(nmcli | awk '/servers: /{print $2}' | sed -n '1p')
+dnsServer=$(nmcli | awk '/servers: /{print $2}'| sed -n '1p')
+usersLoggedIn=$(getent passwd | tail -n 2 | cut -d':' -f1 | sed -n '1p'); $(getent passwd | tail -n 2 | cut -d':' -f1 | sed -n '2p')
 
 cat <<EOF
 
@@ -52,7 +53,7 @@ IP Address: $ipAddress
 
 System Status
 -------------
-Users Logged In: 
+Users Logged In: $usersLoggedIn
 Disk Space: 
 Process Count: 
 Load Averages: 
