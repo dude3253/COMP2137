@@ -21,13 +21,14 @@ hostAddress=$(ip addr show | awk '/inet /{print $2}' | cut -d'/' -f1 | sed -n '2
 gatewayIP=$(ip route | awk '/default /{print $3}')
 interface=$(nmcli | awk '/interface: /{print $2}')
 dnsServer=$(nmcli | awk '/servers: /{print $2}'| sed -n '1p')
-usersLoggedIn=$(getent passwd | tail -n 2 | cut -d':' -f1)
+usersLoggedIn1=$(getent passwd | tail -n 2 | cut -d':' -f1 | sed -n '1p')
+usersLoggedIn2=$(getent passwd | tail -n 2 | cut -d':' -f1 | sed -n '2p')
 processCount=$(ps -A | wc -l)
 memoryAllocation=$(free -h)
 ufwRules=$(sudo ufw status)
 diskSpace=$(df -hP | awk '/dev/')
-listenPort=$(ss -tnlp)
-loadAverage=$(uptime | awk '{print $8, $9, $10}')
+listenPort=$(ss -tnlp | awk '/LISTEN /{print $1, $2, $3}')
+loadAverage=$(uptime | awk '{print $9, $10, $11}')
 
 cat <<EOF
 
@@ -59,7 +60,7 @@ IP Address: $ipAddress
 
 System Status
 -------------
-Users Logged In: $usersLoggedIn
+Users Logged In: $usersLoggedIn1, $usersLoggedIn2
 Disk Space: $diskSpace
 Process Count: $processCount
 Load Averages: $loadAverage
