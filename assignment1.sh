@@ -27,7 +27,6 @@ memoryAllocation=$(free -h)
 ufwRules=$(sudo ufw status)
 diskSpace=$(df -hP | awk '/dev/')
 listenPort=$(ss -tnlp)
-#netstat -atnp | grep -i "LISTEN")
 loadAverage=$(uptime | awk '{print $8, $9, $10}')
 
 cat <<EOF
