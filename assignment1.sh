@@ -4,13 +4,14 @@ userName=$USER
 today=$(date +%y-%m-%d/%l:%M:%S)
 comp_hostname=$(hostname)
 userUptime=$(uptime | awk '{print $1}')
-cpuInfo=$(lscpu | grep -i 'Model name:' | cut -d':' -f2 | tr -d '[:space:]')
+cpuInfo=$(lscpu | awk '/Model name: / {print $3, $4, $5, $6, $7, $8, $9}')
 cpuSpeed=$(cat /proc/cpuinfo | grep -i 'cpu mhz' | head -n 1 | awk '{print $4}')
+cpuSpeed2=$(cat /proc/cpuinfo | grep -i 'cpu mhz' | head -n 1 | awk '{print $2}')
 ramSize=$(free -h | grep -i "mem:" | awk '{print $2}')
 osSource=$(cat /etc/os-release | grep "PRETTY_NAME" | cut -d= -f2)
-disks1=$(lsblk -dno model | tr -d '[:space:]' | cut -dS -f1)
+disks1=$(lsblk -dno model | tail -n 2 | awk '{print $1, $2, $3}' | sed -n '1p')
 diskSize1=$(lsblk -dno size | tail -n 3 | awk '{print $1}' | sed -n '1p')
-disks2=$(lsblk -dno model | tr -d '[:space:]' | cut -dS -f2)
+disks2=$(lsblk -dno model | tail -n 2 | awk '{print $1, $2, $3}' | sed -n '')
 diskSize2=$(lsblk -dno size | tail -n 2 | awk '{print $1}'| sed -n '1p')
 vidCardMake=$(lshw -class display | grep -i 'vendor:' | cut -d':' -f2)
 vidCard=$(lshw -class display | grep -i 'product:' | cut -d':' -f2)
@@ -42,7 +43,7 @@ Uptime: $userUptime
 Hardware Information 
 --------------------
 CPU: $cpuInfo
-Speed: $cpuSpeed
+Speed: $cpuSpeed$cpuSpeed2
 RAM: $ramSize
 Disks: $disks1 - $diskSize1, $disks2 - $diskSize2
 Videocard: $vidCardMake$vidCard
