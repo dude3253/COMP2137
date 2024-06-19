@@ -27,7 +27,7 @@ processCount=$(ps -A | wc -l)
 memoryAllocation=$(free -h)
 ufwRules=$(sudo ufw status)
 diskSpace=$(df -hP | awk '/dev/')
-listenPort=$(ss -tnlp | awk '/LISTEN /{print $1, $2}')
+listenPort=$(ss -tnlp | awk '/LISTEN /{print $1, $2, $3}')
 loadAverage=$(uptime | awk '{print $9, $10, $11}')
 
 cat <<EOF
