@@ -3,7 +3,7 @@
 userName=$USER
 today=$(date +%y-%m-%d/%l:%M:%S)
 comp_hostname=$(hostname)
-userUptime=$(uptime)
+userUptime=$(uptime | awk '{print $1}')
 cpuInfo=$(lscpu | grep -i 'Model name:' | cut -d':' -f2 | tr -d '[:space:]')
 cpuSpeed=$(cat /proc/cpuinfo | grep -i 'cpu mhz' | head -n 1 | awk '{print $4}')
 ramSize=$(free -h | grep -i "mem:" | awk '{print $2}')
@@ -21,7 +21,14 @@ gatewayIP=$(ip route | awk '/default /{print $3}')
 networkMake=$(lshw -class network | awk '/vendor: /' | head -n 1 | cut -d':' -f2)
 networkCard=$(lshw -class network | awk '/product: /'| head -n 1 | cut -d':' -f2)
 dnsServer=$(nmcli | awk '/servers: /{print $2}'| sed -n '1p')
-usersLoggedIn=$(getent passwd | tail -n 2 | cut -d':' -f1 | sed -n '1p'); $(getent passwd | tail -n 2 | cut -d':' -f1 | sed -n '2p')
+usersLoggedIn=$(getent passwd | tail -n 2 | cut -d':' -f1)
+processCount=$(ps -A | wc -l)
+memoryAllocation=$(free -h)
+ufwRules=$(sudo ufw status)
+diskSpace=$(df -hP | awk '/dev/')
+listenPort=$(ss -tnlp)
+#netstat -atnp | grep -i "LISTEN")
+loadAverage=$(uptime | awk '{print $8, $9, $10}')
 
 cat <<EOF
 
@@ -49,16 +56,16 @@ Host Address: $hostAddress
 Gateway IP: $gatewayIP
 DNS Server: $dnsServer
 Interface Name: $networkMake$networkCard
-IP Address: $ipAddress
+IP Address: $ipAddress   
 
 System Status
 -------------
 Users Logged In: $usersLoggedIn
-Disk Space: 
-Process Count: 
-Load Averages: 
-Memory Allocation: 
-Listening Network Ports: 
-UFW Rules: 
+Disk Space: $diskSpace
+Process Count: $processCount
+Load Averages: $loadAverage
+Memory Allocation: $memoryAllocation
+Listening Network Ports: $listenPort
+UFW Rules: $ufwRules
 
 EOF
