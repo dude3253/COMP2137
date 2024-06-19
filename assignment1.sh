@@ -18,8 +18,7 @@ ipAddress=$(ip addr show | awk '/inet /{print $2}' | sed -n '2p')
 fqdn=$(nmcli | awk '/domains: / {print $2}' | sed -n '2p')
 hostAddress=$(ip addr show | awk '/inet /{print $2}' | cut -d'/' -f1 | sed -n '2p')
 gatewayIP=$(ip route | awk '/default /{print $3}')
-networkMake=$(lshw -class network | awk '/vendor: /' | head -n 1 | cut -d':' -f2)
-networkCard=$(lshw -class network | awk '/product: /'| head -n 1 | cut -d':' -f2)
+interface=$(nmcli | awk '/interface: /{print $2}')
 dnsServer=$(nmcli | awk '/servers: /{print $2}'| sed -n '1p')
 usersLoggedIn=$(getent passwd | tail -n 2 | cut -d':' -f1)
 processCount=$(ps -A | wc -l)
@@ -54,7 +53,7 @@ FQDN: $comp_hostname.$fqdn
 Host Address: $hostAddress
 Gateway IP: $gatewayIP
 DNS Server: $dnsServer
-Interface Name: $networkMake$networkCard
+Interface Name: $interface
 IP Address: $ipAddress   
 
 System Status
