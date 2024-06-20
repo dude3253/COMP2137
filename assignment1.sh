@@ -14,10 +14,10 @@ cpuInfo=$(lscpu | awk '/Model name: / {print $3, $4, $5, $6, $7, $8, $9}')
 cpuSpeed=$(cat /proc/cpuinfo | grep -i 'cpu mhz' | head -n 1 | awk '{print $4}')
 cpuSpeed2=$(cat /proc/cpuinfo | grep -i 'cpu mhz' | head -n 1 | awk '{print $2}')
 #shows free ram. grep is used to search for the pattern and awk is used to print releveant information.
-ramSize=$(free -h | grep -i "mem:" | awk '{print $2}')
+ramSize=$(lshw -class memory | awk '/size: /{print $2}')
 #shows os information, grep searches for the PRETTY_NAME patter and cut removes unnecessary information
 osSource=$(cat /etc/os-release | grep "PRETTY_NAME" | cut -d= -f2)
-#disks and diskSize shows the model and size of the first disk. Tail command shows the ending information and awk command displays the necessary information.
+#disks and diskSize shows the model and size of the first and second disk. Tail command shows the ending information and awk command displays the necessary information.
 disks1=$(lsblk -dno model | tail -n 2 | awk '{print $1, $2, $3}' | sed -n '1p')
 diskSize1=$(lsblk -dno size | tail -n 3 | awk '{print $1}' | sed -n '1p')
 disks2=$(lsblk -dno model | tail -n 2 | awk '{print $1, $2, $3}' | sed -n '2p')
@@ -27,7 +27,7 @@ vidCardMake=$(lshw -class display | grep -i 'vendor:' | cut -d':' -f2)
 vidCard=$(lshw -class display | grep -i 'product:' | cut -d':' -f2)
 #shows network information
 ipAddress=$(ip addr show | awk '/inet /{print $2}' | sed -n '2p')
-fqdn=$(nmcli | awk '/domains: / {print $2}' | sed -n '2p')
+fqdn=$(hostname -f)
 hostAddress=$(ip addr show | awk '/inet /{print $2}' | cut -d'/' -f1 | sed -n '2p')
 gatewayIP=$(ip route | awk '/default /{print $3}')
 interface1=$(nmcli | awk '/interface: /{print $2}' | sed -n '1p')
@@ -41,11 +41,11 @@ processCount=$(ps -A | wc -l)
 #shows memory allocation
 memoryAllocation=$(free -h)
 #shows ufw status
-ufwRules=$(sudo ufw status)
+ufwRules=$(sudo ufw show added)
 #shows disk space available
 diskSpace=$(df -hP | awk '/dev/ ')
 #shows listening port
-listenPort=$(ss -tnlp | awk '/LISTEN /{print $1, $2, $3}')
+listenPort=$(ss -tnlp | grep -i "listen" | awk '{print $1, $4}' | cut -d':' -f2)
 #shows load average
 loadAverage=$(uptime | awk '{print $9, $10, $11}')
 
@@ -70,7 +70,7 @@ Videocard: $vidCardMake$vidCard
 
 Network Information
 -------------------
-FQDN: $comp_hostname.$fqdn
+FQDN: $fqdn
 Host Address: $hostAddress
 Gateway IP: $gatewayIP
 DNS Server: $dnsServer
