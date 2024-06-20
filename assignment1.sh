@@ -19,14 +19,15 @@ ipAddress=$(ip addr show | awk '/inet /{print $2}' | sed -n '2p')
 fqdn=$(nmcli | awk '/domains: / {print $2}' | sed -n '2p')
 hostAddress=$(ip addr show | awk '/inet /{print $2}' | cut -d'/' -f1 | sed -n '2p')
 gatewayIP=$(ip route | awk '/default /{print $3}')
-interface=$(nmcli | awk '/interface: /{print $2}')
+interface1=$(nmcli | awk '/interface: /{print $2}' | sed -n '1p')
+interface2=$(nmcli | awk '/interface: /{print $2}' | sed -n '2p')
 dnsServer=$(nmcli | awk '/servers: /{print $2}'| sed -n '1p')
 usersLoggedIn1=$(getent passwd | tail -n 2 | cut -d':' -f1 | sed -n '1p')
 usersLoggedIn2=$(getent passwd | tail -n 2 | cut -d':' -f1 | sed -n '2p')
 processCount=$(ps -A | wc -l)
 memoryAllocation=$(free -h)
 ufwRules=$(sudo ufw status)
-diskSpace=$(df -hP | awk '/dev/')
+diskSpace=$(df -hP | awk '/dev/ ')
 listenPort=$(ss -tnlp | awk '/LISTEN /{print $1, $2, $3}')
 loadAverage=$(uptime | awk '{print $9, $10, $11}')
 
@@ -55,7 +56,7 @@ FQDN: $comp_hostname.$fqdn
 Host Address: $hostAddress
 Gateway IP: $gatewayIP
 DNS Server: $dnsServer
-Interface Name: $interface
+Interface Name: $interface1, $interface2
 IP Address: $ipAddress   
 
 System Status
