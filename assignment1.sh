@@ -1,20 +1,31 @@
 #!/bin/bash
 
+#shows username
 userName=$USER
+#shows date and time
 today=$(date +%y-%m-%d/%l:%M:%S)
+#shows computer hostname
 comp_hostname=$(hostname)
+#shows uptime and used awk command to display relevant information only.
 userUptime=$(uptime | awk '{print $1}')
+#Show cpu information. The awk command is to search for relevant information and print displays the matched fields
 cpuInfo=$(lscpu | awk '/Model name: / {print $3, $4, $5, $6, $7, $8, $9}')
+#cpuSpeed and cpuSpeed2 shows cpu speed information with clock speed.
 cpuSpeed=$(cat /proc/cpuinfo | grep -i 'cpu mhz' | head -n 1 | awk '{print $4}')
 cpuSpeed2=$(cat /proc/cpuinfo | grep -i 'cpu mhz' | head -n 1 | awk '{print $2}')
+#shows free ram. grep is used to search for the pattern and awk is used to print releveant information.
 ramSize=$(free -h | grep -i "mem:" | awk '{print $2}')
+#shows os information, grep searches for the PRETTY_NAME patter and cut removes unnecessary information
 osSource=$(cat /etc/os-release | grep "PRETTY_NAME" | cut -d= -f2)
+#disks and diskSize shows the model and size of the first disk. Tail command shows the ending information and awk command displays the necessary information.
 disks1=$(lsblk -dno model | tail -n 2 | awk '{print $1, $2, $3}' | sed -n '1p')
 diskSize1=$(lsblk -dno size | tail -n 3 | awk '{print $1}' | sed -n '1p')
 disks2=$(lsblk -dno model | tail -n 2 | awk '{print $1, $2, $3}' | sed -n '2p')
 diskSize2=$(lsblk -dno size | tail -n 2 | awk '{print $1}'| sed -n '1p')
+#shows videocard information and uses grep and cut to display necessary information
 vidCardMake=$(lshw -class display | grep -i 'vendor:' | cut -d':' -f2)
 vidCard=$(lshw -class display | grep -i 'product:' | cut -d':' -f2)
+#shows network information
 ipAddress=$(ip addr show | awk '/inet /{print $2}' | sed -n '2p')
 fqdn=$(nmcli | awk '/domains: / {print $2}' | sed -n '2p')
 hostAddress=$(ip addr show | awk '/inet /{print $2}' | cut -d'/' -f1 | sed -n '2p')
@@ -22,13 +33,20 @@ gatewayIP=$(ip route | awk '/default /{print $3}')
 interface1=$(nmcli | awk '/interface: /{print $2}' | sed -n '1p')
 interface2=$(nmcli | awk '/interface: /{print $2}' | sed -n '2p')
 dnsServer=$(nmcli | awk '/servers: /{print $2}'| sed -n '1p')
+#shows 2 users in the system
 usersLoggedIn1=$(getent passwd | tail -n 2 | cut -d':' -f1 | sed -n '1p')
 usersLoggedIn2=$(getent passwd | tail -n 2 | cut -d':' -f1 | sed -n '2p')
+#shows process count
 processCount=$(ps -A | wc -l)
+#shows memory allocation
 memoryAllocation=$(free -h)
+#shows ufw status
 ufwRules=$(sudo ufw status)
+#shows disk space available
 diskSpace=$(df -hP | awk '/dev/ ')
+#shows listening port
 listenPort=$(ss -tnlp | awk '/LISTEN /{print $1, $2, $3}')
+#shows load average
 loadAverage=$(uptime | awk '{print $9, $10, $11}')
 
 cat <<EOF
