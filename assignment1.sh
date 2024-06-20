@@ -80,11 +80,14 @@ IP Address: $ipAddress
 System Status
 -------------
 Users Logged In: $usersLoggedIn1, $usersLoggedIn2
-Disk Space: $diskSpace
+Disk Space: 
+$diskSpace
 Process Count: $processCount
 Load Averages: $loadAverage
-Memory Allocation: $memoryAllocation
-Listening Network Ports: $listenPort
+Memory Allocation: 
+$memoryAllocation
+Listening Network Ports: 
+$listenPort
 UFW Rules: $ufwRules
 
 EOF
