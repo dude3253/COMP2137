@@ -88,6 +88,6 @@ Memory Allocation:
 $memoryAllocation
 Listening Network Ports: 
 $listenPort
-UFW Rules: $ufwRule
+UFW Rules: $ufwRules
 
 EOF
