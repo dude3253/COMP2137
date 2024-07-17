@@ -126,25 +126,25 @@ user_accounts() {
             sudo chown -R $user:$user /home/$user/.ssh
         fi
         
-        sudo -u $user ssh-keygen -t rsa -b 2048 -q -N "" -f /home/$user/.ssh/id_rsa
-  # Generate ED25519 key
+        sudo -u $user ssh-keygen -t rsa -q -N "" -f /home/$user/.ssh/id_rsa
         sudo -u $user ssh-keygen -t ed25519 -q -N "" -f /home/$user/.ssh/id_ed25519
 
   # Append public keys to authorized_keys
         sudo -u $user cat /home/$user/.ssh/id_rsa.pub /home/$user/.ssh/id_ed25519.pub >> /home/$user/.ssh/authorized_keys
 
   # Set permissions for authorized_keys
-  sudo chmod 600 /home/$user/.ssh/authorized_keys
+        sudo chmod 600 /home/$user/.ssh/authorized_keys
 
   # Add user to sudo group if it's dennis
-  if [ "$user" = "dennis" ]; then
-    sudo usermod -aG sudo $user
-  fi
+        if [ "$user" = "dennis" ]; then
+            sudo usermod -aG sudo $user
+        fi
 
   # Add additional SSH key for dennis
-  if [ "$user" = "dennis" ]; then
-    echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG4rT3vTt99Ox5kndS4HmgTrKBT8SKzhK4rhGkEVGlCI student@generic-vm" >> /home/$user/.ssh/authorized_keys
-  fi
+        if [ "$user" = "dennis" ]; then
+            echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG4rT3vTt99Ox5kndS4HmgTrKBT8SKzhK4rhGkEVGlCI student@generic-vm" >> /home/$user/.ssh/authorized_keys
+        fi
+    done
 }
 
 
