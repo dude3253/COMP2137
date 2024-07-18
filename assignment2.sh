@@ -4,6 +4,7 @@ newIP='192.168.16.21'
 oldIP=$(cat /etc/hosts | awk '/server1/ {print $1}' | sed -n '2p')
 netplanIP=$(grep -Po '(?<=addresses: \[).*(?=\])' /etc/netplan/10-lxc.yaml | head -n 1)
 fnetplanIP="192.168.16.21/24"
+
 #Change the IP Address of Server1 from /etc/hosts
 changeIP() {
     if [ -z $oldIP ]; then
@@ -14,22 +15,22 @@ changeIP() {
     else
         sed -i "s/$oldIP/$newIP/" /etc/hosts
         echo "The IP Address in /etc/hosts has been changed."
-        sudo netplan apply
         return 0
     fi
 }
+
 #Change the IP Address of yaml file in /etc/netplan
 change_netplan() {
     if [[ $netplanIP != $fnetplanIP ]]; then
         sed -i 's/${netplanIP}/${fnetplanIP}/g' /etc/netplan/10-lxc.yaml
-        sudo netplan apply
+        netplan apply
         echo "The IP Address in the yaml file is updated."
     else
         echo "The IP Address in the yaml file is already updated."
     fi
 }
 
-
+#Installing and enabling apache2
 install_apache() {
     
     if ! systemctl status apache2 &> /dev/null; then
@@ -43,6 +44,7 @@ install_apache() {
     fi
 }
 
+#Installing and enabling squid
 install_squid() {
     if ! systemctl status squid &> /dev/null; then
         sudo echo "Installing squid."
@@ -54,6 +56,7 @@ install_squid() {
     fi
 }
 
+#Installing and enabling UFW
 firewall_config() {
     if ! command -v ufw &> /dev/null; then
         echo "Installing UFW..."
@@ -68,6 +71,7 @@ firewall_config() {
         echo "UFW already installed in the system."
     fi
 
+#Setting up UFW incoming and outgoing traffic
     echo "Setting up UFW policies"
     ufw default deny incoming &> /dev/null
     ufw default allow outgoing &> /dev/null
@@ -80,8 +84,13 @@ firewall_config() {
     
     echo "Configuring traffic"
     ufw allow in on eth1 to any port 22 &> /dev/null
+    ufw allow in on eth1 to any port 22/tcp &> /dev/null
+    ufw allow OpenSSH on eth0&> /dev/null &> /dev/null
     ufw allow in on any to any port 80 &> /dev/null
+    ufw allow http &> /dev/null
+    ufw allow https &> /dev/null
     ufw allow in on any to any port 3128 &> /dev/null
+    ufw allow www &> /dev/null
         if [ $? -ne 0 ]; then
             echo "Failed to configure UFW rules."
             return 1
@@ -100,7 +109,7 @@ firewall_config() {
 
 
 }
-
+#Creating user accounts
 user_accounts() {
     echo "Adding user accounts"
     userAccounts=("dennis" "aubrey" "captain" "snibbles" "brownie" "scooter" "sandy" "perrier" "cindy" "tiger" "yoda")
@@ -115,6 +124,7 @@ user_accounts() {
         else
             sudo useradd -m -d /home/$user -s /bin/bash $user
             sudo mkdir -p /home/$user/.ssh
+            sudo chmod 700 /hom/$user/.ssh
             echo "Creating directory for user $user"
         fi
         if ! sudo chown -R "$user:$user" "/home/$user/.ssh" 2>/dev/null; then
@@ -126,18 +136,18 @@ user_accounts() {
         sudo -u $user ssh-keygen -t rsa -q -N "" -f /home/$user/.ssh/id_rsa
         sudo -u $user ssh-keygen -t ed25519 -q -N "" -f /home/$user/.ssh/id_ed25519
 
-  # Append public keys to authorized_keys
+#Attaching public keys to authorized_keys
         sudo -u $user cat /home/$user/.ssh/id_rsa.pub /home/$user/.ssh/id_ed25519.pub >> /home/$user/.ssh/authorized_keys
 
-  # Set permissions for authorized_keys
+#Setting permissions for authorized_keys
         sudo chmod 600 /home/$user/.ssh/authorized_keys
-
-  # Add user to sudo group if it's dennis
+        
+#Adding dennis to sudo
         if [ "$user" = "dennis" ]; then
             sudo usermod -aG sudo $user
         fi
 
-  # Add additional SSH key for dennis
+# Adding another SSH key for dennis
         if [ "$user" = "dennis" ]; then
             echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG4rT3vTt99Ox5kndS4HmgTrKBT8SKzhK4rhGkEVGlCI student@generic-vm" >> /home/$user/.ssh/authorized_keys
         fi
