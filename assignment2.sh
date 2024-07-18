@@ -2,8 +2,8 @@
 
 newIP='192.168.16.21'
 oldIP=$(cat /etc/hosts | awk '/server1/ {print $1}' | sed -n '2p')
-netplanIP=$(cat /etc/netplan/10-lxc.yaml | awk '/addresses: / {print $2}' | sed -n '1p')
-fnetplanIP="[192.168.16.21/24]"
+netplanIP=$(grep -Po '(?<=addresses: \[).*(?=\])' /etc/netplan/10-lxc.yaml | head -n 1)
+fnetplanIP="192.168.16.21/24"
 #Change the IP Address of Server1 from /etc/hosts
 changeIP() {
     if [ -z $oldIP ]; then
@@ -16,23 +16,19 @@ changeIP() {
         echo "The IP Address in /etc/hosts has been changed."
         sudo netplan apply
         return 0
-    
     fi
 }
 #Change the IP Address of yaml file in /etc/netplan
 change_netplan() {
-    if [ -z "$fnetplanIP" ]; then
-        echo "The IP Address: $fnetplanIP not found in /etc/netplan/10-lxc.yaml"
-        return 1
-    elif [[ $fnetplanIP == $netplanIP ]]; then
-        echo "The /etc/netplan/10-lxc.yaml is already modified to appropriate IP Address."
-        return 0
+    if [[ $netplanIP != $fnetplanIP ]]; then
+        sed -i 's/${netplanIP}/${fnetplanIP}/g' /etc/netplan/10-lxc.yaml
+        sudo netplan apply
+        echo "The IP Address in the yaml file is updated."
     else
-        sed -i "s/$netplanIP/$fnetplanIP/g" /etc/netplan/10-lxc.yaml
-        echo "The IP Address in the /etc/netplan/10-lxc.yaml has been changed."
-        return 0
+        echo "The IP Address in the yaml file is already updated."
     fi
 }
+
 
 install_apache() {
     
@@ -106,6 +102,7 @@ firewall_config() {
 }
 
 user_accounts() {
+    echo "Adding user accounts"
     userAccounts=("dennis" "aubrey" "captain" "snibbles" "brownie" "scooter" "sandy" "perrier" "cindy" "tiger" "yoda")
     for user in ${userAccounts[@]} 
     do
