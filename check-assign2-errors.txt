@@ -1,41 +1,40 @@
---2024-07-17 15:11:38--  https://zonzorp.github.io/COMP2137/makecontainers.sh
-Resolving zonzorp.github.io (zonzorp.github.io)... 185.199.111.153, 185.199.109.153, 185.199.110.153, ...
-Connecting to zonzorp.github.io (zonzorp.github.io)|185.199.111.153|:443... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 13218 (13K) [application/x-sh]
-Saving to: ‘/home/dale/makecontainers.sh’
-
-     0K .......... ..                                         100% 41.0M=0s
-
-2024-07-17 15:11:38 (41.0 MB/s) - ‘/home/dale/makecontainers.sh’ saved [13218/13218]
-
 WARNING:root:Cannot call Open vSwitch: ovsdb-server.service is not running.
 dpkg-preconfigure: unable to re-open stdin: No such file or directory
 Warning: Permanently added 'server1-mgmt' (ED25519) to the list of known hosts.
 WARNING:root:Cannot call Open vSwitch: ovsdb-server.service is not running.
-sed: -e expression #1, char 40: unknown option to `s'
 useradd: warning: the home directory /home/dennis already exists.
 useradd: Not copying any file from skel directory into it.
+chmod: cannot access '/hom/dennis/.ssh': No such file or directory
 useradd: warning: the home directory /home/aubrey already exists.
 useradd: Not copying any file from skel directory into it.
+chmod: cannot access '/hom/aubrey/.ssh': No such file or directory
 useradd: warning: the home directory /home/captain already exists.
 useradd: Not copying any file from skel directory into it.
+chmod: cannot access '/hom/captain/.ssh': No such file or directory
 useradd: warning: the home directory /home/snibbles already exists.
 useradd: Not copying any file from skel directory into it.
+chmod: cannot access '/hom/snibbles/.ssh': No such file or directory
 useradd: warning: the home directory /home/brownie already exists.
 useradd: Not copying any file from skel directory into it.
+chmod: cannot access '/hom/brownie/.ssh': No such file or directory
 useradd: warning: the home directory /home/scooter already exists.
 useradd: Not copying any file from skel directory into it.
+chmod: cannot access '/hom/scooter/.ssh': No such file or directory
 useradd: warning: the home directory /home/sandy already exists.
 useradd: Not copying any file from skel directory into it.
+chmod: cannot access '/hom/sandy/.ssh': No such file or directory
 useradd: warning: the home directory /home/perrier already exists.
 useradd: Not copying any file from skel directory into it.
+chmod: cannot access '/hom/perrier/.ssh': No such file or directory
 useradd: warning: the home directory /home/cindy already exists.
 useradd: Not copying any file from skel directory into it.
+chmod: cannot access '/hom/cindy/.ssh': No such file or directory
 useradd: warning: the home directory /home/tiger already exists.
 useradd: Not copying any file from skel directory into it.
+chmod: cannot access '/hom/tiger/.ssh': No such file or directory
 useradd: warning: the home directory /home/yoda already exists.
 useradd: Not copying any file from skel directory into it.
+chmod: cannot access '/hom/yoda/.ssh': No such file or directory
 WARNING:root:Cannot call Open vSwitch: ovsdb-server.service is not running.
-sed: -e expression #1, char 40: unknown option to `s'
+WARNING:root:Cannot call Open vSwitch: ovsdb-server.service is not running.
 WARNING:root:Cannot call Open vSwitch: ovsdb-server.service is not running.
