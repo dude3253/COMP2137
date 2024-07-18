@@ -124,7 +124,7 @@ user_accounts() {
         else
             sudo useradd -m -d /home/$user -s /bin/bash $user
             sudo mkdir -p /home/$user/.ssh
-            sudo chmod 700 /hom/$user/.ssh
+            sudo chmod 700 /home/$user/.ssh
             echo "Creating directory for user $user"
         fi
         if ! sudo chown -R "$user:$user" "/home/$user/.ssh" 2>/dev/null; then
