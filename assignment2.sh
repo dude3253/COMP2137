@@ -84,12 +84,12 @@ firewall_config() {
     echo "Configuring traffic"
     ufw allow in on eth1 to any port 22 &> /dev/null
     ufw allow in on eth1 to any port 22/tcp &> /dev/null
-    ufw allow OpenSSH on eth0&> /dev/null &> /dev/null
+    ufw allow OpenSSH in eth1 to any port 22 &> /dev/null
     ufw allow in on any to any port 80 &> /dev/null
-    ufw allow http &> /dev/null
-    ufw allow https &> /dev/null
+    ufw allow http to any port 80 &> /dev/null
+    ufw allow https to any port 80 &> /dev/null
     ufw allow in on any to any port 3128 &> /dev/null
-    ufw allow www &> /dev/null
+    ufw allow www to any port 3128 &> /dev/null
         if [ $? -ne 0 ]; then
             echo "Failed to configure UFW rules."
             return 1
@@ -123,7 +123,7 @@ user_accounts() {
         else
             sudo useradd -m -d /home/$user -s /bin/bash $user
             sudo mkdir -p /home/$user/.ssh
-            sudo chmod 700 /hom/$user/.ssh
+            sudo chmod 700 /home/$user/.ssh
             echo "Creating directory for user $user"
         fi
         if ! sudo chown -R "$user:$user" "/home/$user/.ssh" 2>/dev/null; then
