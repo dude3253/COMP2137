@@ -2,7 +2,7 @@
 
 newIP='192.168.16.21'
 oldIP=$(cat /etc/hosts | awk '/server1/ {print $1}' | sed -n '2p')
-netplanIP=$(grep -Po '(?<=addresses: \[).*(?=\])' /etc/netplan/10-lxc.yaml | head -n 1)
+netplanIP=$(sed -n '/eth0:/ {N;N;p;/:addresses:/p}' /etc/netplan/10-lxc.yaml| grep -q "addresses")
 fnetplanIP="192.168.16.21/24"
 
 #Change the IP Address of Server1 from /etc/hosts
@@ -21,15 +21,14 @@ changeIP() {
 
 #Change the IP Address of yaml file in /etc/netplan
 change_netplan() {
-    if [[ $netplanIP != $fnetplanIP ]]; then
-        sed -i 's/${netplanIP}/${fnetplanIP}/g' /etc/netplan/10-lxc.yaml
-        netplan apply
+    if sed -n '/eth0:/ {N;N;p;/:addresses:/p}' /etc/netplan/10-lxc.yaml| grep -q "addresses"; then
+	    sed -i '\|eth0:|,\|^ *[^ ]| { \|addresses:| s|addresses: .*$|addresses: ['"$fnetplanIP"']| }' 	/etc/netplan/10-lxc.yaml
+	    netplan apply
         echo "The IP Address in the yaml file is updated."
     else
-        echo "The IP Address in the yaml file is already updated."
+	    echo "The update on the IP Address has failed."
     fi
 }
-
 #Installing and enabling apache2
 install_apache() {
     
@@ -124,7 +123,7 @@ user_accounts() {
         else
             sudo useradd -m -d /home/$user -s /bin/bash $user
             sudo mkdir -p /home/$user/.ssh
-            sudo chmod 700 /home/$user/.ssh
+            sudo chmod 700 /hom/$user/.ssh
             echo "Creating directory for user $user"
         fi
         if ! sudo chown -R "$user:$user" "/home/$user/.ssh" 2>/dev/null; then
