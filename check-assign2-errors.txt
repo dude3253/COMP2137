@@ -4,26 +4,37 @@ Warning: Permanently added 'server1-mgmt' (ED25519) to the list of known hosts.
 WARNING:root:Cannot call Open vSwitch: ovsdb-server.service is not running.
 useradd: warning: the home directory /home/dennis already exists.
 useradd: Not copying any file from skel directory into it.
+chmod: cannot access '/hom/dennis/.ssh': No such file or directory
 useradd: warning: the home directory /home/aubrey already exists.
 useradd: Not copying any file from skel directory into it.
+chmod: cannot access '/hom/aubrey/.ssh': No such file or directory
 useradd: warning: the home directory /home/captain already exists.
 useradd: Not copying any file from skel directory into it.
+chmod: cannot access '/hom/captain/.ssh': No such file or directory
 useradd: warning: the home directory /home/snibbles already exists.
 useradd: Not copying any file from skel directory into it.
+chmod: cannot access '/hom/snibbles/.ssh': No such file or directory
 useradd: warning: the home directory /home/brownie already exists.
 useradd: Not copying any file from skel directory into it.
+chmod: cannot access '/hom/brownie/.ssh': No such file or directory
 useradd: warning: the home directory /home/scooter already exists.
 useradd: Not copying any file from skel directory into it.
+chmod: cannot access '/hom/scooter/.ssh': No such file or directory
 useradd: warning: the home directory /home/sandy already exists.
 useradd: Not copying any file from skel directory into it.
+chmod: cannot access '/hom/sandy/.ssh': No such file or directory
 useradd: warning: the home directory /home/perrier already exists.
 useradd: Not copying any file from skel directory into it.
+chmod: cannot access '/hom/perrier/.ssh': No such file or directory
 useradd: warning: the home directory /home/cindy already exists.
 useradd: Not copying any file from skel directory into it.
+chmod: cannot access '/hom/cindy/.ssh': No such file or directory
 useradd: warning: the home directory /home/tiger already exists.
 useradd: Not copying any file from skel directory into it.
+chmod: cannot access '/hom/tiger/.ssh': No such file or directory
 useradd: warning: the home directory /home/yoda already exists.
 useradd: Not copying any file from skel directory into it.
+chmod: cannot access '/hom/yoda/.ssh': No such file or directory
 WARNING:root:Cannot call Open vSwitch: ovsdb-server.service is not running.
 WARNING:root:Cannot call Open vSwitch: ovsdb-server.service is not running.
 WARNING:root:Cannot call Open vSwitch: ovsdb-server.service is not running.
