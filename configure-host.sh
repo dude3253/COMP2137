@@ -1,6 +1,6 @@
 #!/bin/bash
 
-chmod +x ~/configure-host.sh
+chmod +x /root/configure-host.sh
 oldHostname=$(hostname)
 oldIP=$(ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1)
 newHostname=""
