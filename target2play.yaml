@@ -11,12 +11,12 @@
 
     - name: Installing MySQL and UFW
       apt:
-        name: 
+        name:
           - mysql-server
           - ufw
         state: present
-        update_cache: yes      
-      
+        update_cache: yes
+
     - name: Enabling UFW
       ufw:
         state: enabled
@@ -32,7 +32,7 @@
         rule: allow
         proto: tcp
         port: "3306"
-        
+
 
 
 
