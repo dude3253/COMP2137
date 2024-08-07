@@ -1,0 +1,44 @@
+- name: Installing Apache2 and UFW
+  hosts: target1-mgmt
+  remote_user: remoteadmin
+  become: yes
+  become_user: root
+
+  tasks:
+    - name: Updating apt package
+      apt:
+        update_cache: yes
+
+    - name: Installing Apache2 and UFW
+      apt:
+        name:
+          - apache2
+          - ufw
+        state: present
+        update_cache: yes
+
+    - name: Running and enabling apache2
+      systemd:
+        name: apache2
+        enabled: yes
+        state: started
+      
+    - name: Enabling UFW
+      ufw:
+        state: enabled
+
+    - name: Allowing SSH on port 22
+      ufw:
+        rule: allow
+        port: "22"
+        proto: tcp
+
+    - name: Allowing HTTP on port 80
+      ufw:
+        rule: allow
+        port: "80"
+        proto: tcp
+
+    
+
+
