@@ -1,0 +1,39 @@
+- name: installing MySQL and UFW
+  hosts: target2-mgmt
+  remote_user: remoteadmin
+  become: yes
+  become_user: root
+
+  tasks:
+    - name: Updating apt package
+      apt:
+        update_cache: yes
+
+    - name: Installing MySQL and UFW
+      apt:
+        name: 
+          - mysql-server
+          - ufw
+        state: present
+        update_cache: yes      
+      
+    - name: Enabling UFW
+      ufw:
+        state: enabled
+
+    - name: Allowing SSH on port 22
+      ufw:
+        rule: allow
+        port: "22"
+        proto: tcp
+
+    - name: Allowing MySQL on port 3306
+      ufw:
+        rule: allow
+        proto: tcp
+        port: "3306"
+        
+
+
+
+
